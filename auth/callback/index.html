@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YouHue – Confirming your email</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: linear-gradient(150deg, #3b0764 0%, #7C3AED 45%, #EC4899 80%);
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+    }
+    .card {
+      background: rgba(255,255,255,.12);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1.5px solid rgba(255,255,255,.25);
+      border-radius: 32px;
+      padding: 52px 40px;
+      max-width: 420px;
+      width: 100%;
+    }
+    .logo-mark {
+      width: 68px; height: 68px;
+      border-radius: 20px;
+      background: #fff;
+      display: grid;
+      place-items: center;
+      font-size: 34px;
+      margin: 0 auto 24px;
+      box-shadow: 0 8px 32px rgba(0,0,0,.18);
+    }
+    h1 {
+      font-size: 26px;
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: 10px;
+      line-height: 1.2;
+    }
+    .sub {
+      font-size: 15px;
+      color: rgba(255,255,255,.82);
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+
+    /* Spinner */
+    .spinner {
+      width: 40px; height: 40px;
+      border: 4px solid rgba(255,255,255,.25);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+      margin: 0 auto 24px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* States */
+    #state-loading, #state-fallback, #state-error {
+      display: none;
+    }
+    #state-loading.active, #state-fallback.active, #state-error.active {
+      display: block;
+    }
+
+    .btn {
+      display: inline-block;
+      background: #fff;
+      color: #7C3AED;
+      text-decoration: none;
+      padding: 14px 32px;
+      border-radius: 100px;
+      font-size: 16px;
+      font-weight: 800;
+      margin-top: 8px;
+      box-shadow: 0 8px 28px rgba(0,0,0,.18);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(0,0,0,.22); }
+    .btn-ghost {
+      background: transparent;
+      border: 2px solid rgba(255,255,255,.5);
+      color: #fff;
+      box-shadow: none;
+      margin-top: 16px;
+      display: inline-block;
+      padding: 12px 28px;
+      border-radius: 100px;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .status-icon {
+      font-size: 52px;
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <div class="logo-mark">🎨</div>
+
+  <!-- Loading state (default) -->
+  <div id="state-loading">
+    <div class="spinner"></div>
+    <h1>Opening YouHue…</h1>
+    <p class="sub">Hang tight — we're confirming your email and launching the app.</p>
+  </div>
+
+  <!-- Fallback: app didn't open -->
+  <div id="state-fallback">
+    <div class="status-icon">📱</div>
+    <h1>Email Confirmed!</h1>
+    <p class="sub">Your email is verified. If YouHue didn't open automatically, tap the button below.</p>
+    <a id="open-app-btn" href="#" class="btn">Open YouHue</a>
+    <br />
+    <a href="https://jaydonchion.github.io/kolorist/" class="btn-ghost">Download the App</a>
+  </div>
+
+  <!-- Error: no code in URL -->
+  <div id="state-error">
+    <div class="status-icon">🤔</div>
+    <h1>Hmm, something's off</h1>
+    <p class="sub">This link looks invalid or has already been used. Try signing up again.</p>
+    <a href="https://jaydonchion.github.io/kolorist/" class="btn">Go to YouHue</a>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var params = new URLSearchParams(window.location.search);
+    var code = params.get('code');
+
+    var loadingEl  = document.getElementById('state-loading');
+    var fallbackEl = document.getElementById('state-fallback');
+    var errorEl    = document.getElementById('state-error');
+
+    if (!code) {
+      errorEl.classList.add('active');
+      return;
+    }
+
+    // Show loading first
+    loadingEl.classList.add('active');
+
+    // Build the deep link and fire it
+    var deepLink = 'youhue://?code=' + encodeURIComponent(code);
+    document.getElementById('open-app-btn').href = deepLink;
+
+    // Attempt to open the app immediately
+    window.location.href = deepLink;
+
+    // After 2.5 s, if we're still here show the manual-open fallback.
+    // (If the app opened, the browser tab will be backgrounded / closed
+    //  so this timeout never fires in that case on mobile.)
+    setTimeout(function () {
+      loadingEl.classList.remove('active');
+      fallbackEl.classList.add('active');
+    }, 2500);
+  })();
+</script>
+
+</body>
+</html>
