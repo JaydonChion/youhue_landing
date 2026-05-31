@@ -80,10 +80,11 @@
       border-radius: 100px;
       font-size: 14px;
       font-weight: 700;
-      transition: opacity .2s, transform .2s;
       white-space: nowrap;
+      opacity: .6;
+      cursor: default;
+      pointer-events: none;
     }
-    .nav-cta:hover { opacity: .85; transform: translateY(-1px); }
 
     /* ────────── HERO ────────── */
     .hero {
@@ -163,17 +164,17 @@
       animation: fadeDown .7s ease .3s both;
     }
     .btn-hero-primary {
-      background: #fff;
+      background: rgba(255,255,255,.5);
       color: var(--purple);
       text-decoration: none;
       padding: 16px 34px;
       border-radius: 100px;
       font-size: 16px;
       font-weight: 800;
-      box-shadow: 0 10px 40px rgba(0,0,0,.22);
-      transition: transform .2s, box-shadow .2s;
+      box-shadow: 0 10px 40px rgba(0,0,0,.12);
+      cursor: default;
+      pointer-events: none;
     }
-    .btn-hero-primary:hover { transform: translateY(-3px); box-shadow: 0 16px 50px rgba(0,0,0,.28); }
     .btn-hero-ghost {
       background: rgba(255,255,255,.14);
       backdrop-filter: blur(12px);
@@ -407,15 +408,15 @@
       display: flex;
       align-items: center;
       gap: 14px;
-      background: #fff;
+      background: rgba(255,255,255,.5);
       color: var(--text);
       text-decoration: none;
       padding: 16px 32px;
       border-radius: 18px;
-      box-shadow: 0 10px 40px rgba(0,0,0,.18);
-      transition: transform .2s, box-shadow .2s;
+      box-shadow: 0 10px 40px rgba(0,0,0,.1);
+      cursor: default;
+      pointer-events: none;
     }
-    .store-btn:hover { transform: translateY(-4px); box-shadow: 0 18px 50px rgba(0,0,0,.24); }
     .store-btn-icon { font-size: 30px; }
     .sb-small { font-size: 11px; color: var(--text-sec); font-weight: 600; }
     .sb-big   { font-size: 18px; font-weight: 900; }
@@ -453,7 +454,7 @@
     <div class="logo-mark">🎨</div>
     <span class="logo-text">YouHue</span>
   </a>
-  <a href="#download" class="nav-cta">Get the App</a>
+  <span class="nav-cta">Coming Soon</span>
 </nav>
 
 <!-- ── HERO ── -->
@@ -472,7 +473,7 @@
   </p>
 
   <div class="hero-ctas">
-    <a href="#download" class="btn-hero-primary">📱 Download Free</a>
+    <span class="btn-hero-primary">Coming Soon on iOS</span>
     <a href="#how-it-works" class="btn-hero-ghost">See How It Works</a>
   </div>
 
@@ -618,13 +619,13 @@
   <h2>Ready to Find Your<br>Colours? 🎨</h2>
   <p>Free to download. No credit card. Just good vibes.</p>
   <div class="store-btns">
-    <a href="#" class="store-btn">
+    <span class="store-btn">
       <span class="store-btn-icon">🍎</span>
       <div>
-        <div class="sb-small">Download on the</div>
+        <div class="sb-small">Coming soon to the</div>
         <div class="sb-big">App Store</div>
       </div>
-    </a>
+    </span>
   </div>
 </section>
 
