@@ -824,14 +824,18 @@
         body: JSON.stringify({ email })
       });
 
+      const body = await res.text();
+      console.log('Waitlist response:', res.status, body);
+
       // 201 = created, 409 = duplicate (email already on list) — both are fine
       if (res.ok || res.status === 409) {
         document.getElementById('modal-form-wrap').classList.add('hide');
         document.getElementById('modal-success').classList.add('show');
       } else {
-        throw new Error('status ' + res.status);
+        throw new Error('Status ' + res.status + ': ' + body);
       }
-    } catch {
+    } catch (err) {
+      console.error('Waitlist error:', err);
       btn.disabled    = false;
       btn.textContent = 'Count me in →';
       alert('Something went wrong — please try again!');
