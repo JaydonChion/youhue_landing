@@ -72,10 +72,10 @@
     @keyframes spin { to { transform: rotate(360deg); } }
 
     /* States */
-    #state-loading, #state-fallback, #state-error {
+    #state-loading, #state-fallback, #state-error, #state-used {
       display: none;
     }
-    #state-loading.active, #state-fallback.active, #state-error.active {
+    #state-loading.active, #state-fallback.active, #state-error.active, #state-used.active {
       display: block;
     }
 
@@ -136,7 +136,19 @@
     <span class="btn-ghost">Coming Soon</span>
   </div>
 
-  <!-- Error: no code in URL -->
+  <!-- Link already used, but email is likely already confirmed -->
+  <div id="state-used">
+    <div class="status-icon">✅</div>
+    <h1>You're already confirmed!</h1>
+    <p class="sub">
+      This link has already been used — often because your email app
+      automatically opens links to scan them for safety. Your account
+      should be verified already, so just open Kameleo and log in.
+    </p>
+    <a href="kameleo://" class="btn">Open Kameleo</a>
+  </div>
+
+  <!-- Error: no code in URL and no recognizable error params -->
   <div id="state-error">
     <div class="status-icon">🤔</div>
     <h1>Hmm, something's off</h1>
@@ -148,14 +160,27 @@
 <script>
   (function () {
     var params = new URLSearchParams(window.location.search);
-    var code = params.get('code');
+    var code  = params.get('code');
+    var error = params.get('error') || params.get('error_code');
 
     var loadingEl  = document.getElementById('state-loading');
     var fallbackEl = document.getElementById('state-fallback');
     var errorEl    = document.getElementById('state-error');
+    var usedEl     = document.getElementById('state-used');
 
     if (!code) {
-      errorEl.classList.add('active');
+      // Supabase verifies the email server-side BEFORE redirecting here, so
+      // by the time we land on this page the account is already confirmed —
+      // regardless of whether this exact link click succeeds. A redirect
+      // with an error param (e.g. otp_expired) almost always means the
+      // one-time token was already consumed, usually by the email client
+      // pre-fetching the link to scan it. Show reassuring copy instead of
+      // a generic "invalid link" in that case.
+      if (error) {
+        usedEl.classList.add('active');
+      } else {
+        errorEl.classList.add('active');
+      }
       return;
     }
 
